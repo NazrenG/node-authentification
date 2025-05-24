@@ -1,0 +1,14 @@
+2025-05-24T13:36:11.061Z - 401 - Access token not found in cookies
+Error: Access token not found in cookies
+    at logErrorToFileWithStack (file:///C:/Users/user/OneDrive/Desktop/node-start/utils/logErrorToFile.js:24:17)
+    at protectRoute (file:///C:/Users/user/OneDrive/Desktop/node-start/middleware/protectRoute.js:8:7)
+    at Layer.handleRequest (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\index.js:295:15
+    at processParams (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\index.js:582:12)
+    at next (C:\Users\user\OneDrive\Desktop\node-start\node_modules\router\index.js:291:5)
+2025-05-24T13:38:57.039Z - 401 - Access token not found in cookies
+2025-05-24T13:39:48.477Z - 500 - Cast to ObjectId failed for value "56" (type string) at path "_id" for model "Todo"

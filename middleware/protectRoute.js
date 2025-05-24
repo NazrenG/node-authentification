@@ -1,10 +1,14 @@
 import {  User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-
+import { logErrorToFileWithStack } from "../utils/logErrorToFile.js";
 export const protectRoute = async (req, res, next) => {
   try {
     const { accessToken } = req.cookies;
     if (!accessToken) {
+      logErrorToFileWithStack(
+        "Access token not found in cookies",
+        401
+      );
       return res.status(401).json({ message: "Access token not found" });
     }
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);

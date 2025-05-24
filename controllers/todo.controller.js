@@ -1,16 +1,18 @@
 import Todo from "../models/todo.model.js";
 import { getTokenContents } from "../utils/getTokenContent.js";
+import {logErrorToFile,logErrorToFileWithStack} from "../utils/logErrorToFile.js";
 
 // Create a new todo
 export const createTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const {accessToken}= req.cookies;
-    const {id}=getTokenContents(res, accessToken); 
+    const { accessToken } = req.cookies;
+    const { id } = getTokenContents(res, accessToken);
     const newTodo = new Todo({ title, description, user: id });
     await newTodo.save();
     res.status(201).json(newTodo);
   } catch (error) {
+    logErrorToFile(error);
     res.status(500).json({ message: "Error creating todo", error });
   }
 };
@@ -24,6 +26,7 @@ export const getUserTodos = async (req, res) => {
     );
     res.status(200).json(todos);
   } catch (error) {
+     logErrorToFile(error);
     res.status(500).json({ message: "Error fetching todos for user", error });
   }
 };
@@ -31,9 +34,10 @@ export const getUserTodos = async (req, res) => {
 export const getTodos = async (req, res) => {
   try {
     const todos = await Todo.find();
-    console.log("adgadcgacgdeeee")
+    console.log("adgadcgacgdeeee");
     res.status(200).json(todos);
   } catch (error) {
+     logErrorToFile(error);
     res.status(500).json({ message: "Error fetching todos", error });
   }
 };
@@ -43,10 +47,12 @@ export const getTodoById = async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findById(id);
     if (!todo) {
+      logErrorToFileWithStack(`Todo with ID ${id} not found`, 404);
       return res.status(404).json({ message: "Todo not found" });
     }
     res.status(200).json(todo);
   } catch (error) {
+     logErrorToFile(error);
     res.status(500).json({ message: "Error fetching todo", error });
   }
 };
@@ -59,10 +65,12 @@ export const updateTodo = async (req, res) => {
       runValidators: true,
     });
     if (!updatedTodo) {
+      logErrorToFileWithStack(`Todo with ID ${id} not found`, 404);
       return res.status(404).json({ message: "Todo not found" });
     }
     res.status(200).json(updatedTodo);
   } catch (error) {
+    logErrorToFile(error);
     res.status(500).json({ message: "Error updating todo", error });
   }
 };
@@ -72,10 +80,12 @@ export const deleteTodo = async (req, res) => {
     const { id } = req.params;
     const deletedTodo = await Todo.findByIdAndDelete(id);
     if (!deletedTodo) {
+      logErrorToFileWithStack(`Todo with ID ${id} not found`, 404);
       return res.status(404).json({ message: "Todo not found" });
     }
     res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
+  logErrorToFile(error);
     res.status(500).json({ message: "Error deleting todo", error });
   }
 };

@@ -1,12 +1,13 @@
+import {  User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 export const protectRoute = async (req, res, next) => {
   try {
-    const { accesToken } = req.cookies;
-    if (!accesToken) {
+    const { accessToken } = req.cookies;
+    if (!accessToken) {
       return res.status(401).json({ message: "Access token not found" });
     }
-    const decoded = jwt.verify(accesToken, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     if (!decoded) {
       return res.status(403).json({ message: "Invalid access token" });
     }

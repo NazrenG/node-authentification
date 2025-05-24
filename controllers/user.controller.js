@@ -1,4 +1,4 @@
-import {User} from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 
 //crete a new user
 export const createUser = async (req, res) => {
@@ -14,7 +14,7 @@ export const createUser = async (req, res) => {
 //get all users
 export const getUsers = async (req, res) => {
   try {
-    const users = await find();
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Error fetching users", error });
@@ -22,15 +22,15 @@ export const getUsers = async (req, res) => {
 };
 //get current user
 export const getCurrentUser = async (req, res) => {
-  const { id } = req.user;
+  const { _id } = req.user;
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(_id.toString());
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    req.status(200).json(user);
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user", error });
+    console.error("Error fetching current user:", error);
   }
 };
 
@@ -59,21 +59,20 @@ export const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(updatedUser);
-}catch(err){
+  } catch (err) {
     res.status(500).json({ message: "Error updating user", err });
   }
-}
+};
 //delete user by id
-export const deleteUser=async (req ,res)=>{
-    const {id}=req.params;
-    try{
-        const deletedUser=await User.findByIdAndDelete(id);
-        if(!deletedUser){
-            return res.status(404).json({message:"User not found"});
-        }
-        res.status(200).json({message:"User deleted successfully"});
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
-    catch(err){
-        res.status(500).json({message:"Error deleting user", err});
-    }
-}
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting user", err });
+  }
+};

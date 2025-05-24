@@ -1,20 +1,39 @@
 import Todo from "../models/todo.model.js";
+import { getTokenContents } from "../utils/getTokenContent.js";
 
 // Create a new todo
 export const createTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const newTodo = new Todo({ title, description });
+    const {accessToken}= req.cookies;
+    const {id}=getTokenContents(res, accessToken);
+    console.log("Request User:", req.user); // Debug üçün əlavə et
+    console.log("Creating todo with:", { title, description, id });
+    const newTodo = new Todo({ title, description, user: id });
     await newTodo.save();
     res.status(201).json(newTodo);
   } catch (error) {
     res.status(500).json({ message: "Error creating todo", error });
   }
 };
+//get all todos for a user
+export const getUserTodos = async (req, res) => {
+  try {
+    const user = req.user._id;
+    const todos = await Todo.find({ user }).populate(
+      "user",
+      "firstName lastName email"
+    );
+    res.status(200).json(todos);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching todos for user", error });
+  }
+};
 // Get all todos
 export const getTodos = async (req, res) => {
   try {
     const todos = await Todo.find();
+    console.log("adgadcgacgdeeee")
     res.status(200).json(todos);
   } catch (error) {
     res.status(500).json({ message: "Error fetching todos", error });

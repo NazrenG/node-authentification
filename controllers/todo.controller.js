@@ -6,9 +6,7 @@ export const createTodo = async (req, res) => {
   try {
     const { title, description } = req.body;
     const {accessToken}= req.cookies;
-    const {id}=getTokenContents(res, accessToken);
-    console.log("Request User:", req.user); // Debug üçün əlavə et
-    console.log("Creating todo with:", { title, description, id });
+    const {id}=getTokenContents(res, accessToken); 
     const newTodo = new Todo({ title, description, user: id });
     await newTodo.save();
     res.status(201).json(newTodo);
